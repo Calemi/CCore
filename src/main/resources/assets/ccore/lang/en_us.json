@@ -1,0 +1,17 @@
+{
+  "ccore.blocks": "block(s)",
+  "ccore.stacks": "stack(s)",
+  
+  "ccore.lore.key.shift": "Shift",
+  "ccore.lore.key.ctrl": "Ctrl",
+  "ccore.lore.info": "Info",
+  "ccore.lore.controls": "Controls",
+  "ccore.lore.recipes": "Recipe",
+  "ccore.lore.control_type.use": "Use",
+  "ccore.lore.control_type.use-open-hand": "Use-Open-Hand",
+  "ccore.lore.control_type.sneak-use": "Sneak-Use",
+  "ccore.lore.control_type.sneak-break-block": "Sneak-Break-Block",
+  "ccore.lore.control_type.release-use": "Release-Use",
+  "ccore.lore.control_type.left-click-block": "Left-Click-Block",
+  "ccore.lore.control_type.sneak-left-click-block": "Sneak-Left-Click-Block"
+}
