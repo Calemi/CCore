@@ -1,0 +1,12 @@
+[v1.0.2]
+- Attempt to fix BlockScanner bug.
+
+[v1.0.1]
+- Added BlockScanner class.
+- Added UnitMessenger class.
+   
+[v1.0.1]
+- Removed useless registry classes.
+   
+[v1.0.0]
+- Initial build.

@@ -18,35 +18,6 @@ import net.minecraft.world.level.Level;
 public class ItemHelper {
 
     /**
-     * @param count The count to use.
-     * @return A message containing the number counted by stacks.
-     */
-    public static MutableComponent countByStacks(int count) {
-
-        int remainder = (count % 64);
-
-        MutableComponent msg = Component.literal(StringHelper.insertCommas(count));
-        msg.append(" ");
-        msg.append(Component.translatable(CCoreRef.MOD_ID + ".blocks"));
-
-        if (count > 64) {
-
-            msg.append(" (" + ((int) Math.floor((float) count / 64)));
-            msg.append(" ");
-            msg.append(Component.translatable(CCoreRef.MOD_ID + ".stacks"));
-
-            if (remainder > 0) {
-                msg.append(" + " + remainder + " ");
-                msg.append(Component.translatable(CCoreRef.MOD_ID + ".blocks"));
-            }
-
-            msg.append(")");
-        }
-
-        return msg;
-    }
-
-    /**
      * Gives a player an Item Stack. First it adds it to their inventory, then spawns any remaining stacks at the player.
      * @param player The Player to give the item to.
      * @param stack  The Item Stack to spawn.

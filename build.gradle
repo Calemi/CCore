@@ -147,7 +147,6 @@ curseforge {
         id = mod_project_id
         releaseType = mod_release_type
 
-        changelogType = "markdown"
         changelog = file("changelog.md")
 
         addGameVersion "${minecraft_version}"

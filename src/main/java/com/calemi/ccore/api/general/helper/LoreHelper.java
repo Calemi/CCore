@@ -1,5 +1,6 @@
 package com.calemi.ccore.api.general.helper;
 
+import com.calemi.ccore.main.CCoreRef;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ public class LoreHelper {
     public static void addInformationLoreFirst(List<Component> tooltipList, MutableComponent loreComponent) {
 
         if (!addInformationLore(tooltipList, loreComponent)) {
-            tooltipList.add(getPlateText("lore.key.shift", ChatFormatting.AQUA).append(" ").append(Component.translatable("lore.info").withStyle(ChatFormatting.GRAY)));
+            tooltipList.add(getPlateText("key.shift", ChatFormatting.AQUA).append(" ").append(Component.translatable(CCoreRef.MOD_ID + ".lore.info").withStyle(ChatFormatting.GRAY)));
         }
     }
 
@@ -51,7 +52,7 @@ public class LoreHelper {
     public static void addControlsLoreFirst(List<Component> tooltipList, MutableComponent loreComponent, ControlType controlType) {
 
         if (!addControlsLore(tooltipList, loreComponent, controlType)) {
-            tooltipList.add(getPlateText("lore.key.ctrl", ChatFormatting.AQUA).append(" ").append(Component.translatable("lore.controls").withStyle(ChatFormatting.GRAY)));
+            tooltipList.add(getPlateText("key.ctrl", ChatFormatting.AQUA).append(" ").append(Component.translatable(CCoreRef.MOD_ID + ".lore.controls").withStyle(ChatFormatting.GRAY)));
         }
     }
 
@@ -96,7 +97,7 @@ public class LoreHelper {
      * @return A String with surrounding brackets and color in the middle.
      */
     public static MutableComponent getPlateText(String valueKey, ChatFormatting format) {
-        return Component.literal(ChatFormatting.GRAY + "[").append(Component.translatable(valueKey).withStyle(format)).append(ChatFormatting.GRAY + "]");
+        return Component.literal(ChatFormatting.GRAY + "[").append(Component.translatable(CCoreRef.MOD_ID + ".lore." + valueKey).withStyle(format)).append(ChatFormatting.GRAY + "]");
     }
 
     public enum ControlType {
@@ -116,7 +117,7 @@ public class LoreHelper {
         }
 
         String getName() {
-            return "lore.control_type." + key;
+            return "control_type." + key;
         }
     }
 }

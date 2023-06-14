@@ -345,7 +345,7 @@ public class Location {
     public boolean equals(Object obj) {
 
         if (obj instanceof Location newLoc) {
-            return level == newLoc.level && getBlockPos() == newLoc.getBlockPos();
+            return level.equals(newLoc.level) && getBlockPos().equals(newLoc.getBlockPos());
         }
 
         return super.equals(obj);
