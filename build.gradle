@@ -144,7 +144,7 @@ curseforge {
 
     project {
 
-        id = mod_id
+        id = mod_project_id
         releaseType = mod_release_type
 
         changelogType = "markdown"
