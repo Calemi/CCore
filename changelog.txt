@@ -1,3 +1,8 @@
+[v1.0.3]
+- Refined LoreHelper code
+- Moved countByStacks method from ItemHelper to its own class (ComponentHelper)
+- Fixed bug with Locations not comparing correctly.
+
 [v1.0.2]
 - Attempt to fix BlockScanner bug.
 
