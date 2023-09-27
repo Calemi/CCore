@@ -3,8 +3,6 @@ package com.calemi.ccore.api.general.helper;
 import com.calemi.ccore.api.general.ItemSpawnProfile;
 import com.calemi.ccore.api.general.Location;
 import com.calemi.ccore.main.CCoreRef;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,12 +23,19 @@ public class ItemHelper {
     public static void giveItem(Player player, ItemStack stack, int amount) {
 
         int fittingSpace = ContainerHelper.calculateFittingSpace(player.getInventory(), stack);
-        ContainerHelper.insertStack(player.getInventory(), stack, fittingSpace);
 
-        amount -= fittingSpace;
+        if (fittingSpace < amount) {
+            ContainerHelper.insertItem(player.getInventory(), stack, fittingSpace);
 
-        ItemSpawnProfile spawnProfile = new ItemSpawnProfile().setStack(stack).setAmount(amount).setTarget(player);
-        spawnProfile.spawn();
+            amount -= fittingSpace;
+
+            ItemSpawnProfile spawnProfile = new ItemSpawnProfile().setStack(stack).setAmount(amount).setTarget(player);
+            spawnProfile.spawn();
+
+            return;
+        }
+
+        ContainerHelper.insertItem(player.getInventory(), stack, amount);
     }
 
     /**
@@ -62,7 +67,7 @@ public class ItemHelper {
      * @return The Item Entity that spawned.
      */
     public static ItemEntity spawnStack(Level level, float x, float y, float z, Item item, int amount) {
-        return spawnStack(level, x, y, z, item, amount);
+        return spawnStack(level, x, y, z, new ItemStack(item), amount);
     }
 
     /**

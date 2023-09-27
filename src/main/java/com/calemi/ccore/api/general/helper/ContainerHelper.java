@@ -1,6 +1,7 @@
 package com.calemi.ccore.api.general.helper;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,9 +36,16 @@ public class ContainerHelper {
      */
     private static int countItems(Container container, ItemStack stack, boolean compareNBT) {
 
+        boolean isInventory = container instanceof Inventory;
+
         int count = 0;
 
         for (int slotIndex = 0; slotIndex < container.getContainerSize(); slotIndex++) {
+
+            //IGNORE ARMOR SLOTS
+            if (isInventory && (slotIndex == 36 || slotIndex == 37 || slotIndex == 38 || slotIndex == 39)) {
+                continue;
+            }
 
             ItemStack stackInSlot = container.getItem(slotIndex);
 
@@ -84,9 +92,16 @@ public class ContainerHelper {
      */
     private static int calculateFittingSpace(Container container, ItemStack stack, boolean compareNBT) {
 
+        boolean isInventory = container instanceof Inventory;
+
         int fittingSpace = 0;
 
         for (int slotIndex = 0; slotIndex < container.getContainerSize(); slotIndex++) {
+
+            //IGNORE ARMOR SLOTS
+            if (isInventory && (slotIndex == 36 || slotIndex == 37 || slotIndex == 38 || slotIndex == 39)) {
+                continue;
+            }
 
             ItemStack stackInSlot = container.getItem(slotIndex);
 
@@ -149,6 +164,8 @@ public class ContainerHelper {
      */
     private static void consumeItems(Container container, ItemStack stack, int amount, boolean compareNBT) {
 
+        boolean isInventory = container instanceof Inventory;
+
         int amountLeft = amount;
 
         if (countItems(container, stack, compareNBT) < amount) {
@@ -156,6 +173,11 @@ public class ContainerHelper {
         }
 
         for (int slotIndex = 0; slotIndex < container.getContainerSize(); slotIndex++) {
+
+            //IGNORE ARMOR SLOTS
+            if (isInventory && (slotIndex == 36 || slotIndex == 37 || slotIndex == 38 || slotIndex == 39)) {
+                continue;
+            }
 
             if (amountLeft <= 0) break;
 
@@ -178,14 +200,29 @@ public class ContainerHelper {
             }
 
             else {
-                amountLeft -= stackInSlot.getCount();
                 stackInSlot.shrink(amountLeft);
+                return;
             }
         }
     }
 
-    public static boolean canInsertStack(Container container, ItemStack stack) {
-        return canInsertStack(container, stack, stack.getCount());
+    /**
+     * @param container The Container to test.
+     * @param item     The Item to test.
+     * @param amount    The amount to check for.
+     * @return true, if the given Item can be inserted in the Container.
+     */
+    public static boolean canInsertItem(Container container, Item item, int amount) {
+        return calculateFittingSpace(container, item) >= amount;
+    }
+
+    /**
+     * @param container The Container to test.
+     * @param stack     The Item Stack to test.
+     * @return true, if the given Item Stack can be inserted in the Container.
+     */
+    public static boolean canInsertItem(Container container, ItemStack stack) {
+        return canInsertItem(container, stack, stack.getCount());
     }
 
     /**
@@ -194,36 +231,27 @@ public class ContainerHelper {
      * @param amount    The amount to check for.
      * @return true, if the given Item Stack can be inserted in the Container.
      */
-    public static boolean canInsertStack(Container container, ItemStack stack, int amount) {
-
-        int amountLeft = amount;
-
-        for (int slotIndex = 0; slotIndex < container.getContainerSize(); slotIndex++) {
-
-            ItemStack stackInSlot = container.getItem(slotIndex);
-
-            if (!container.canPlaceItem(slotIndex, stack)) {
-                continue;
-            }
-
-            if (stackInSlot.isEmpty()) {
-                amountLeft -= stack.getMaxStackSize();
-                continue;
-            }
-
-            if (!ItemStack.isSameItemSameTags(stackInSlot, stack)) {
-                continue;
-            }
-
-            int spaceLeftInStack = stack.getMaxStackSize() - stackInSlot.getCount();
-            amountLeft -= spaceLeftInStack;
-        }
-
-        return amountLeft <= 0;
+    public static boolean canInsertItem(Container container, ItemStack stack, int amount) {
+        return calculateFittingSpace(container, stack) >= amount;
     }
 
-    public static void insertStack(Container container, ItemStack stack) {
-        insertStack(container, stack, stack.getCount());
+    /**
+     * Inserts the given ItemStack into the Container.
+     * @param container The Container to insert in.
+     * @param item     The Item to insert.
+     * @param amount    The amount to insert.
+     */
+    public static void insertItem(Container container, Item item, int amount) {
+        insertItem(container, new ItemStack(item), amount);
+    }
+
+    /**
+     * Inserts the given ItemStack into the Container.
+     * @param container The Container to insert in.
+     * @param stack     The ItemStack to insert.
+     */
+    public static void insertItem(Container container, ItemStack stack) {
+        insertItem(container, stack, stack.getCount());
     }
 
     /**
@@ -232,9 +260,11 @@ public class ContainerHelper {
      * @param stack     The ItemStack to insert.
      * @param amount    The amount to insert.
      */
-    public static void insertStack(Container container, ItemStack stack, int amount) {
+    public static void insertItem(Container container, ItemStack stack, int amount) {
 
-        if (!canInsertStack(container, stack, amount)) {
+        boolean isInventory = container instanceof Inventory;
+
+        if (!canInsertItem(container, stack, amount)) {
             return;
         }
 
@@ -243,34 +273,37 @@ public class ContainerHelper {
 
         for (int slotIndex = 0; slotIndex < container.getContainerSize(); slotIndex++) {
 
+            //IGNORE ARMOR SLOTS
+            if (isInventory && (slotIndex == 36 || slotIndex == 37 || slotIndex == 38 || slotIndex == 39)) {
+                continue;
+            }
+
             if (amountLeft <= 0) break;
 
             ItemStack stackInSlot = container.getItem(slotIndex);
 
             if (stackInSlot.isEmpty()) {
 
-                amountLeft -= maxStackSize;
+                int cappedAmount = Math.min(maxStackSize, amountLeft);
+
+                amountLeft -= cappedAmount;
 
                 ItemStack stackCopy = stack.copy();
-                stackCopy.setCount(maxStackSize);
+                stackCopy.setCount(cappedAmount);
                 container.setItem(slotIndex, stackCopy);
 
                 continue;
             }
 
-            if (ItemStack.isSameItemSameTags(stackInSlot, stack)) {
+            if (!ItemStack.isSameItemSameTags(stackInSlot, stack)) {
                 continue;
             }
 
-            int spaceToMax = maxStackSize -= stackInSlot.getCount();
+            int spaceToMax = maxStackSize - stackInSlot.getCount();
 
             if (spaceToMax >= amountLeft) {
 
-                int left = spaceToMax - amountLeft;
-                amountLeft = 0;
-
-                stackInSlot.setCount(stackInSlot.getCount() + left);
-
+                stackInSlot.setCount(stackInSlot.getCount() + amountLeft);
                 break;
             }
 

@@ -1,3 +1,7 @@
+[v1.0.5]
+- Fixed bugs with ContainerHelper methods.
+- Added Item to help test functions. This item is really only helpful to me, please ignore it.
+
 [v1.0.3]
 - Refined LoreHelper code
 - Moved countByStacks method from ItemHelper to its own class (ComponentHelper)
