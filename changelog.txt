@@ -1,0 +1,9 @@
+[v1.0.2]
+- Added FakeSlotWidget
+- Attempt #1 at fixing mixin crash.
+
+[v1.0.1]
+- Added many new functions and classes.
+
+[v1.0.0]
+- Initial build.

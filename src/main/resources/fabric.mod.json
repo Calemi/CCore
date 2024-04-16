@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "ccore",
+	"version": "${version}",
+	"name": "CCore",
+	"description": "Contains useful functions that my mods can use.",
+	"authors": [
+		"Calemi"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/ccore/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.calemi.ccore.CCore"
+		],
+		"fabric-datagen": []
+	},
+	"mixins": [
+		"ccore.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.9",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}
