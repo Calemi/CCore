@@ -1,8 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
-	id "com.matthewprenger.cursegradle" version "${cursegradle_version}"
-	id 'com.modrinth.minotaur' version "${minotaur_version}"
+	id "me.modmuss50.mod-publish-plugin" version "${publish_version}"
 }
 
 version = project.mod_version
@@ -61,49 +60,25 @@ publishing {
 	repositories {}
 }
 
-curseforge {
+publishMods {
 
-	apiKey = project.findProperty('curseforge_apikey') ?: '0'
+	file = remapJar.archiveFile
+	changelog = file("changelog.txt").text
+	type = STABLE
+	modLoaders.add("fabric")
 
-	project {
-
-		id = curseforge_project_id
-		releaseType = mod_release_type
-
-		changelog = file("changelog.txt")
-
-		addGameVersion "${minecraft_version}"
-		addGameVersion "Java 17"
-		addGameVersion "Fabric"
-
-		mainArtifact(jar) {
-			displayName = "[Fabric ${rootProject.minecraft_version}] v${rootProject.mod_version}"
-		}
+	curseforge {
+		projectId = curseforge_project_id
+		accessToken = project.findProperty('curseforge_apikey') ?: '0'
+		minecraftVersions.add("1.20.1")
+		javaVersions.add(JavaVersion.VERSION_17)
+		clientRequired = true
+		serverRequired = true
 	}
-}
 
-tasks.modrinth.configure({
-	group = 'upload'
-})
-
-modrinth {
-
-	token = project.findProperty('modrinth_apikey') ?: '0'
-
-	projectId = modrinth_project_id
-	versionType = mod_release_type.toUpperCase()
-
-	changelog = file('changelog.txt').text
-
-	versionNumber = "fabric-${minecraft_version}-${mod_version}"
-	versionName = "CCore ${mod_version}"
-	uploadFile = jar
-
-	gameVersions = [minecraft_version]
-	loaders = ['fabric']
-}
-tasks.modrinth.dependsOn(build)
-
-tasks.withType(JavaCompile).configureEach {
-	options.encoding = 'UTF-8'
+	modrinth {
+		accessToken = project.findProperty('modrinth_apikey') ?: '0'
+		projectId = modrinth_project_id
+		minecraftVersions.add("1.20.1")
+	}
 }
