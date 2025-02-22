@@ -1,4 +1,4 @@
-package com.calemi.ccore;
+package com.calemi.ccore.main;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
