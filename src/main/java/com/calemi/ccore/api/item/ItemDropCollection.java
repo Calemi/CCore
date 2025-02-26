@@ -15,14 +15,28 @@ public class ItemDropCollection {
 
     public void addDrop(ItemStack stack) {
 
+        int currentCount = stack.getCount();
+
         //Check for same item and merge stacks.
         for (ItemStack drop : drops) {
 
-            if (ItemStack.isSameItem(drop, stack)) {
-                drop.setCount(drop.getCount() + stack.getCount());
-                return;
+            if (ItemStack.isSameItemSameComponents(drop, stack) && drop.getCount() <= drop.getMaxStackSize()) {
+
+                int spaceLeft = drop.getMaxStackSize() - drop.getCount();
+
+                if (currentCount > spaceLeft) {
+                    currentCount -= spaceLeft;
+                    drop.setCount(drop.getMaxStackSize());
+                }
+
+                else {
+                    drop.setCount(drop.getCount() + stack.getCount());
+                    return;
+                }
             }
         }
+
+        stack.setCount(currentCount);
 
         //New items get appended.
         drops.add(stack);

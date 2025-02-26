@@ -99,8 +99,8 @@ publishing {
 
 unifiedPublishing {
     project {
-        displayName = "CCore v${mod_version} [NeoForge ${minecraft_version}]"
-        releaseType = "release"
+        displayName = "${mod_name} v${mod_version} [NeoForge ${minecraft_version}]"
+        releaseType = "${mod_release_type}"
         if (rootProject.file("changelog.txt").exists()) {
             changelog = rootProject.file("changelog.txt").text
         }
