@@ -1,6 +1,6 @@
 package com.calemi.ccore.api.item;
 
-import com.calemi.ccore.api.location.Location;
+import com.calemi.ccore.api.location.BlockLocation;
 import com.calemi.ccore.api.math.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -47,7 +47,7 @@ public class ItemSpawnProfile {
         return this;
     }
 
-    public ItemSpawnProfile setDestination(Location location) {
+    public ItemSpawnProfile setDestination(BlockLocation location) {
         this.x = location.getX() + 0.5F;
         this.y = location.getY() + 0.5F;
         this.z = location.getZ() + 0.5F;

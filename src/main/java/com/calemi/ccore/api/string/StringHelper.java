@@ -28,4 +28,29 @@ public class StringHelper {
 
         return formatter.format(amountD);
     }
+
+    public static String camelToTitle(String camelCaseInput) {
+
+        String spaced = camelCaseInput.replaceAll("([a-z])([A-Z])", "$1 $2")
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2");
+
+        String[] words = spaced.split(" ");
+        StringBuilder title = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                title.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+
+        return title.toString().trim();
+    }
+
+    public static String camelToSnake(String camelCaseInput) {
+        return camelCaseInput.replaceAll("([a-z])([A-Z])", "$1_$2")
+                .replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2")
+                .toLowerCase();
+    }
 }

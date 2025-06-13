@@ -1,7 +1,8 @@
 package com.calemi.ccore.api.item;
 
-import com.calemi.ccore.api.location.Location;
+import com.calemi.ccore.api.location.BlockLocation;
 import net.minecraft.world.item.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ItemDropCollection {
         drops.add(stack);
     }
 
-    public void dropAll(Location location) {
+    public void dropAll(BlockLocation location) {
 
         for (ItemStack drop : drops) {
 

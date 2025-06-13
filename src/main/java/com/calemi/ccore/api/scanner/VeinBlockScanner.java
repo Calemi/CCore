@@ -1,43 +1,65 @@
 package com.calemi.ccore.api.scanner;
 
-import com.calemi.ccore.api.location.Location;
+import com.calemi.ccore.api.location.BlockLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * For scanning positions in a branching "ore-vein" shape.
+ */
 public class VeinBlockScanner extends BlockScanner {
 
+    private BlockState originBlockState;
+
     /**
-     * Creates a BlockScanner
-     * @param origin      The origin Location of the scan.
-     * @param maxScanSize The maximum amount of Blocks to scan.
+     * Creates a VeinBlockScanner
+     * @param level The Level to scan in.
+     * @param originPosition The BlockPos to start the scan at.
+     * @param maxCollectionSize The maximum amount of Blocks to collect.
      */
-    public VeinBlockScanner(Location origin, int maxScanSize) {
-        super(origin, maxScanSize);
+    public VeinBlockScanner(Level level, BlockPos originPosition, int maxCollectionSize) {
+        super(level, originPosition, maxCollectionSize);
+    }
+
+    /**
+     * Creates a VeinBlockScanner
+     * @param originLocation The BlockLocation to start the scan at.
+     * @param maxCollectionSize The maximum amount of Blocks to collect.
+     */
+    public VeinBlockScanner(BlockLocation originLocation, int maxCollectionSize) {
+        this(originLocation.getLevel(), originLocation.getBlockPos(), maxCollectionSize);
     }
 
     @Override
-    public boolean shouldCollect(Location scannedLocation, BlockState scannedState) {
-        return scannedLocation.getBlock().equals(origin.getBlock());
+    public void start() {
+        super.start();
+        originBlockState = getLevel().getBlockState(getOriginPosition());
     }
 
     @Override
-    public boolean continueOnFailedCollect() {
+    public boolean shouldCollect(BlockPos scannedBlockPos) {
+        return getLevel().getBlockState(scannedBlockPos).equals(originBlockState);
+    }
+
+    @Override
+    public boolean branchOnFailedCollect() {
         return false;
     }
 
     @Override
-    public List<Location> nextLocationsToScan(Location scannedLocation, BlockState scannedState) {
+    public List<BlockPos> nextPositionsToScan(BlockPos prevBlockPos) {
 
-        List<Location> nextLocations = new ArrayList<>();
+        List<BlockPos> nextLocations = new ArrayList<>();
 
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
 
-                    Location nextLocation = new Location(scannedLocation.getLevel(), scannedLocation.getX() + x, scannedLocation.getY() + y, scannedLocation.getZ() + z);
-                    scan(nextLocation);
+                    scan(prevBlockPos.offset(x, y, z));
                 }
             }
         }

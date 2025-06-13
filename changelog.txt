@@ -1,3 +1,9 @@
+[v1.1.1]
+- Fixed scope of some fields.
+
+[v1.1.0]
+- Added many more libraries in preparation for Nexus.
+
 [v1.0.1]
 - Fixed bug with ItemDropCollection dropping overflowing stacks.
 

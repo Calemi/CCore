@@ -1,6 +1,6 @@
 package com.calemi.ccore.api.raytrace;
 
-import com.calemi.ccore.api.location.Location;
+import com.calemi.ccore.api.location.BlockLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -41,12 +41,12 @@ public class RayTraceHelper {
         if (rayTrace.getType() == BlockHitResult.Type.BLOCK) {
 
             BlockPos pos = blockUseContext.getClickedPos();
-            Location locationOffset = new Location(level, pos);
+            BlockLocation locationOffset = new BlockLocation(level, pos);
 
             BlockPos difference = locationOffset.getBlockPos().subtract(itemUseContext.getClickedPos());
             Direction blockSide = Direction.getNearest(difference.getX(), difference.getY(), difference.getZ());
 
-            Location locationReal = locationOffset.copy();
+            BlockLocation locationReal = locationOffset.copy();
             locationReal.relative(blockSide.getOpposite(), 1);
 
             return new BlockTrace(locationReal, blockSide);
@@ -81,9 +81,9 @@ public class RayTraceHelper {
         return entityHit;
     }
 
-    public record BlockTrace(Location hit, Direction hitSide) {
+    public record BlockTrace(BlockLocation hit, Direction hitSide) {
 
-        public Location getHit() {
+        public BlockLocation getHit() {
             return hit;
         }
 
