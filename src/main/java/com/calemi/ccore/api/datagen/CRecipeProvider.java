@@ -47,14 +47,14 @@ public abstract class CRecipeProvider extends RecipeProvider {
         Block sign = family.getBlock(CBlockFamily.MemberType.SIGN);
         Block hangingSign = family.getBlock(CBlockFamily.MemberType.HANGING_SIGN);
 
-        for (CBlockFamily ancestor : family.getAncestors()) {
+        for (int ancestorIndex = 0; ancestorIndex < family.getAncestors().size(); ancestorIndex++) {
 
-            Block ancestorBaseBlock = ancestor.getBlock(CBlockFamily.MemberType.BASE);
+            Block ancestorBaseBlock =  family.getAncestors().get(ancestorIndex).getBlock(CBlockFamily.MemberType.BASE);
 
             if (ancestorBaseBlock == null) continue;
 
             if (baseBlock != null) {
-                twoByTwo(baseBlock, 4, ancestorBaseBlock, null, recipeOutput);
+                if (ancestorIndex == 0) twoByTwo(baseBlock, 4, ancestorBaseBlock, null, recipeOutput);
                 stonecutter(recipeOutput, RecipeCategory.BUILDING_BLOCKS, baseBlock, ancestorBaseBlock);
             }
 

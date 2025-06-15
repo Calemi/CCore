@@ -1,9 +1,9 @@
-package com.calemi.ccore.api.scanner;
+package com.calemi.ccore.api.block.scanner;
 
 import com.calemi.ccore.api.location.BlockLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class VeinBlockScanner extends BlockScanner {
 
-    private BlockState originBlockState;
+    private Block originBlock;
 
     /**
      * Creates a VeinBlockScanner
@@ -23,6 +23,7 @@ public class VeinBlockScanner extends BlockScanner {
      */
     public VeinBlockScanner(Level level, BlockPos originPosition, int maxCollectionSize) {
         super(level, originPosition, maxCollectionSize);
+        originBlock = getLevel().getBlockState(getOriginPosition()).getBlock();
     }
 
     /**
@@ -32,17 +33,12 @@ public class VeinBlockScanner extends BlockScanner {
      */
     public VeinBlockScanner(BlockLocation originLocation, int maxCollectionSize) {
         this(originLocation.getLevel(), originLocation.getBlockPos(), maxCollectionSize);
-    }
-
-    @Override
-    public void start() {
-        super.start();
-        originBlockState = getLevel().getBlockState(getOriginPosition());
+        originBlock = originLocation.getBlockState().getBlock();
     }
 
     @Override
     public boolean shouldCollect(BlockPos scannedBlockPos) {
-        return getLevel().getBlockState(scannedBlockPos).equals(originBlockState);
+        return getLevel().getBlockState(scannedBlockPos).getBlock().equals(originBlock);
     }
 
     @Override
@@ -53,17 +49,17 @@ public class VeinBlockScanner extends BlockScanner {
     @Override
     public List<BlockPos> nextPositionsToScan(BlockPos prevBlockPos) {
 
-        List<BlockPos> nextLocations = new ArrayList<>();
+        List<BlockPos> nextPositions = new ArrayList<>();
 
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
 
-                    scan(prevBlockPos.offset(x, y, z));
+                    nextPositions.add(prevBlockPos.offset(x, y, z));
                 }
             }
         }
 
-        return List.of();
+        return nextPositions;
     }
 }

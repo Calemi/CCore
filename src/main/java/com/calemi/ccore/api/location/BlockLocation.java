@@ -2,9 +2,11 @@ package com.calemi.ccore.api.location;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -253,6 +256,34 @@ public class BlockLocation {
     }
 
     /**
+     * Call only on the server.
+     * @param breaker The Player who is breaking the Block.
+     * @param heldStack The Item Stack being held by the Player.
+     * @return The Block's drops at this Location.
+     */
+    public List<ItemStack> getBlockDropsFromBreaking(Player breaker, ItemStack heldStack) {
+        return Block.getDrops(getBlockState(), (ServerLevel) level, getBlockPos(), getBlockEntity(), breaker, heldStack);
+    }
+
+    /**
+     * @param breaker The player to break the block at this Location.
+     * @param heldStack The player's held Item stack.
+     * @return the amount of experience points a player would receive from breaking the block at this Location.
+     */
+    public int getBlockExperienceFromBreaking(Player breaker, ItemStack heldStack) {
+        return getBlockState().getExpDrop(getLevel(), getBlockPos(), getBlockEntity(), breaker, heldStack);
+    }
+
+    /**
+     * Call only on the server.
+     * Spawns experience points as orbs at this Location.
+     * @param amount the amount of experience points to spawn.
+     */
+    public void spawnExperience(int amount) {
+        getBlock().popExperience((ServerLevel) getLevel(), getBlockPos(), amount);
+    }
+
+    /**
      * @return The FluidState at this BlockLocation.
      */
     public FluidState getFluidState() {
@@ -265,7 +296,7 @@ public class BlockLocation {
      */
     public boolean isFluid(Predicate<FluidState> state) {
         return getLevel().isFluidAtPosition(getBlockPos(), state);
-    }    
+    }
 
     /**
      * @return The BlockEntity at this BlockLocation.
@@ -350,6 +381,8 @@ public class BlockLocation {
     public DifficultyInstance getCurrentDifficulty() {
         return getLevel().getCurrentDifficultyAt(getBlockPos());
     }
+
+
 
     /*
         SOUND EVENTS

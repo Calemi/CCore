@@ -110,7 +110,7 @@ unifiedPublishing {
         if (rootProject.file("changelog.txt").exists()) {
             changelog = rootProject.file("changelog.txt").text
         }
-        gameVersions = ["${minecraft_version}", "1.21"]
+        gameVersions = ["${minecraft_version}"]
         gameLoaders = ["neoforge"]
         mainPublication jar
 

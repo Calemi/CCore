@@ -1,4 +1,4 @@
-package com.calemi.ccore.api.scanner;
+package com.calemi.ccore.api.block.scanner;
 
 import com.calemi.ccore.api.location.BlockLocation;
 import net.minecraft.core.BlockPos;

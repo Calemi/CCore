@@ -18,23 +18,23 @@ public abstract class CLanguageProvider extends LanguageProvider {
         this.modId = modId;
     }
 
-    private void addAutoBlock(Block block) {
+    protected void addAutoBlock(Block block) {
         add(block, autoString(BuiltInRegistries.BLOCK.getKey(block).getPath(), "block"));
     }
 
-    private void addAutoItem(Item item) {
+    protected void addAutoItem(Item item) {
         add(item, autoString(BuiltInRegistries.ITEM.getKey(item).getPath(), "item"));
     }
 
-    private void addAutoConfig(String camelCaseName) {
+    protected void addAutoConfig(String camelCaseName) {
         add(CONFIG + StringHelper.camelToSnake(camelCaseName), StringHelper.camelToTitle(camelCaseName));
     }
 
-    private String getPrefixedKey(String prefix, String name) {
+    protected String getPrefixedKey(String prefix, String name) {
         return prefix + "." + modId + "." + name;
     }
 
-    private String autoString(String descriptionId, String prefixToRemove) {
+    protected String autoString(String descriptionId, String prefixToRemove) {
         String[] words = descriptionId.replace(getPrefixedKey(prefixToRemove, ""), "").split("_");
         StringBuilder result = new StringBuilder();
 
