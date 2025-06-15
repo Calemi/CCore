@@ -9,13 +9,14 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public abstract class CLanguageProvider extends LanguageProvider {
 
-    protected final String CONFIG = getPrefixedKey("config", "");
+    protected final String CONFIG;
 
     protected final String modId;
 
     public CLanguageProvider(String modId, PackOutput output, String locale) {
         super(output, modId, locale);
         this.modId = modId;
+        this.CONFIG = getPrefixedKey("config", "");
     }
 
     protected void addAutoBlock(Block block) {
